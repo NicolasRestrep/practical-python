@@ -1,36 +1,14 @@
 import csv
+import fileparse
 
 def read_portfolio(filename):
-    f = open(filename)
-    rows = csv.reader(f)
-    headers = next(rows)
-    portfolio = []
-
-    for row in rows: 
-        name = row[0]
-        nshares = int(row[1])
-        price = float(row[2])
-        holding = {'name': name,
-                   'shares': nshares, 
-                   'price': price}
-        portfolio.append(holding)
-    return(portfolio)
-
-    f.close()
+    p = fileparse.parse_csv(filename, types=[str, int, float])
+    return p
 
 def read_prices(filename):
-    f = open(filename, 'r')
-    rows = csv.reader(f)
-    stocks = {}
-
-    for row in rows:
-        try:
-            stocks[row[0]] = float(row[1])
-        except IndexError:
-            pass
-    
-    return stocks
-    f.close()
+    prices = fileparse.parse_csv(filename, types=[str, float], has_headers=False)
+    prices_dict = dict(prices)
+    return prices_dict
 
 def make_report(report):
     for name, num_shares, cost, price, gainloss in report:
@@ -42,9 +20,9 @@ def print_report(fn1, fn2):
     change_data = []
     for stock in portfolio:
         name = stock['name']
-        num_shares = int(stock['shares'])
-        cost = float(stock['price'])
-        price = float(prices[stock['name']])
+        num_shares = stock['shares']
+        cost = stock['price']
+        price = prices[stock['name']]
         gainloss = price - cost
         share = (name, num_shares, cost, price, gainloss)
         change_data.append(share)

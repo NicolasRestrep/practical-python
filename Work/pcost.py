@@ -3,25 +3,20 @@
 # Exercise 1.27
 import csv
 import sys
+import report
 
 def portfolio_cost(filename):
-    f = open(filename)
-    rows = csv.reader(f)
-    headers = next(rows)
+    p = report.read_portfolio(filename)
     total = 0
-
-    for rowno, row in enumerate(rows, start=1): 
-        record = dict(zip(headers, row))
+    for stock in p: 
         try:
-            nshares = int(record['shares'])
-            price = float(record['price'])
+            nshares = stock['shares']
+            price = stock['price']
             total += nshares * price
         except ValueError:
-            print(f'Row {rowno}: Could not convert: {row}')
+            print(f'Could not convert: {stock}')
 
     return(total)
-
-    f.close()
 
 if len(sys.argv) == 2:
     filename = sys.argv[1]
