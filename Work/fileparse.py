@@ -7,6 +7,7 @@ def parse_csv(filename, select = None, types = None, has_headers=True, delimiter
     '''
     if select and not has_headers:
         raise RuntimeError('select argument requires column headers')
+
     with open(filename) as f:
         if not delimiter:
             rows = csv.reader(f)

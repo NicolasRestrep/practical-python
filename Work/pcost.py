@@ -1,27 +1,22 @@
 # pcost.py
 #
 # Exercise 1.27
-import csv
-import sys
 import report
+import stock 
 
 def portfolio_cost(filename):
-    p = report.read_portfolio(filename)
-    total = 0
-    for stock in p: 
-        try:
-            nshares = stock['shares']
-            price = stock['price']
-            total += nshares * price
-        except ValueError:
-            print(f'Could not convert: {stock}')
+    '''
+    Computes the total cost (shares*price) of a portfolio file
+    '''
+    portfolio = report.read_portfolio(filename)
+    return sum([s.shares * s.price for s in portfolio])
 
-    return(total)
+def main(args):
+    if len(args) != 2:
+        raise SystemExit('Usage: %s portfoliofile' % args[0])
+    filename = args[1]
+    print('Total cost:', portfolio_cost(filename))
 
-if len(sys.argv) == 2:
-    filename = sys.argv[1]
-else:
-    filename = 'Data/portfolio.csv'
-
-cost = portfolio_cost(filename)
-print("Total cost:", cost)
+if __name__ == '__main__':
+    import sys
+    main(sys.argv)
